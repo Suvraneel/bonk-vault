@@ -9,6 +9,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { NETWORK } from "@utils/endpoints";
 import {
   createAssociatedTokenAccountInstruction,
+  createBurnCheckedInstruction,
   createTransferCheckedInstruction,
   getAccount,
   getAssociatedTokenAddress,
@@ -26,6 +27,7 @@ export type Input = {
   amount?: number;
   type: "sol" | "token";
   tokenAddress?: string;
+  transactionType: "send" | "burn";
 };
 
 export default async function handler(
@@ -39,6 +41,7 @@ export default async function handler(
       amount = 1,
       type = "sol",
       tokenAddress = DEFAULT_TOKEN,
+      transactionType = "burn",
     } = req.body as Input;
 
     const connection = new Connection(NETWORK);
@@ -48,7 +51,29 @@ export default async function handler(
 
     let transaction = new Transaction();
 
-    if (type === "token") {
+    if (transactionType === "burn") {
+      console.log(`Step 2 - Create Burn Instructions`);
+
+      const splToken = new PublicKey(tokenAddress);
+      const mint = await getMint(connection, splToken);
+
+      let payerAta = await getAssociatedTokenAddress(
+        mint.address, // token
+        payer, // owner
+        false
+      );
+
+      const burnIx = createBurnCheckedInstruction(
+        payerAta, // PublicKey of Owner's Associated Token Account
+        splToken, // Public Key of the Token Mint Address
+        payer, // Public Key of Owner's Wallet
+        amount * 10 ** mint.decimals, // Number of tokens to burn
+        mint.decimals // Number of Decimals of the Token Mint
+      );
+
+      transaction.add(burnIx);
+    } else if (type === "token") {
+      console.log(`Step 2 - Create Token Instructions`);
       const splToken = new PublicKey(tokenAddress);
       const mint = await getMint(connection, splToken);
 
@@ -88,10 +113,9 @@ export default async function handler(
           mint.decimals // decimals
         )
       );
-    }
-
-    if (type === "sol") {
+    } else if (type === "sol") {
       // Add a transfer instruction to execute
+      console.log("Step 2 - Create SOL Instructions");
       transaction.add(
         SystemProgram.transfer({
           fromPubkey: payer,
