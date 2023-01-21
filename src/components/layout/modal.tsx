@@ -8,6 +8,7 @@ type Props = {
   headerContent: string;
   buttonContent: string;
   isToken?: boolean;
+  isBurn?: boolean;
   id: string;
 };
 
@@ -17,6 +18,7 @@ export function Modal({
   headerContent,
   buttonContent,
   isToken = false,
+  isBurn = false,
   id,
 }: Props) {
   const [address, setAddress] = React.useState<string | undefined>();
@@ -57,6 +59,7 @@ export function Modal({
                 isToken,
                 address,
                 amount,
+                isBurn,
               })}
               className="btn-primary"
             >

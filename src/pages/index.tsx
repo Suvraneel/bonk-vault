@@ -32,10 +32,12 @@ const Home: NextPage = () => {
   const onTxClick =
     ({
       isToken = false,
+      isBurn = false,
       address,
       amount,
     }: {
       isToken: boolean;
+      isBurn: boolean;
       address?: string;
       amount?: string;
     }) =>
@@ -43,7 +45,7 @@ const Home: NextPage = () => {
       if (connected && publicKey && signTransaction && txState !== "loading") {
         setTxState("loading");
         const buttonToastId = toast.loading("Creating transaction...", {
-          id: `buttonToast${isToken ? "Token" : ""}`,
+          id: `buttonToast${isToken ? "Token" : ""},${isBurn ? "burn" : ""}`,
         });
 
         try {
@@ -59,6 +61,7 @@ const Home: NextPage = () => {
                   : undefined,
                 amount: amount,
                 type: isToken ? "token" : "sol",
+                transactionType: isBurn ? "burn" : "send",
               }),
               headers: { "Content-type": "application/json; charset=UTF-8" },
             }
@@ -152,6 +155,15 @@ const Home: NextPage = () => {
         buttonContent="Send $BONK"
         isToken={true}
         id="bonk-modal"
+      />
+      <Modal
+        onClick={onTxClick}
+        butttonState={txState}
+        headerContent="Burn some $BONK"
+        buttonContent="Burn $BONK"
+        isToken={true}
+        isBurn={true}
+        id="bonk-burn-modal"
       />
       <Modal
         onClick={onTxClick}

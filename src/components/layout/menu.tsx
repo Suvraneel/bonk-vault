@@ -37,6 +37,14 @@ export function Menu({ twitterHandle, className }: Props) {
           </li>
           <li>
             <label
+              htmlFor="bonk-burn-modal"
+              className="btn-ghost lg:btn mb-1 lg:mr-1 lg:mb-0"
+            >
+              Burn $Bonk
+            </label>
+          </li>
+          <li>
+            <label
               htmlFor="sol-modal"
               className="btn-ghost lg:btn mb-1 lg:mr-1 lg:mb-0"
             >
