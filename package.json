@@ -15,6 +15,9 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@glasseaters/hydra-sdk": "^0.3.2",
+    "@orca-so/sdk": "^1.2.25",
+    "@project-serum/common": "^0.0.1-beta.3",
     "@solana/spl-name-service": "^0.1.4",
     "@solana/spl-token": "^0.3.7",
     "@solana/wallet-adapter-base": "^0.9.20",
@@ -26,6 +29,7 @@
     "bs58": "^5.0.0",
     "classnames": "^2.3.2",
     "daisyui": "^2.46.1",
+    "decimal.js": "^10.4.3",
     "next": "13.1.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
