@@ -1,6 +1,7 @@
 import { useWallet } from "@solana/wallet-adapter-react";
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import classNames from "classnames";
+import Link from "next/link";
 
 type Props = {
   twitterHandle?: string;
@@ -27,6 +28,16 @@ export function Menu({ twitterHandle, className }: Props) {
               </a>
             </li>
           )}
+          <li>
+            <label
+              htmlFor="create-vault"
+              className="btn-ghost lg:btn mb-1 lg:mr-1 lg:mb-0"
+            >
+              <Link href="/create">
+                Create Bonk Vault
+              </Link>
+            </label>
+          </li>
           <li>
             <label
               htmlFor="bonk-modal"

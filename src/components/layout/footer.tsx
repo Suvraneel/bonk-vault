@@ -3,14 +3,14 @@ export function Footer() {
     <footer className="footer footer-center p-4 text-base-content">
       <div>
         <p>
-          Created and open-sourced by{" "}
+        Made with ❤️ for Solana by{" "}
           <a
-            href="https://github.com/aeminium-labs/nextjs-solana-starter-kit"
+            href="https://github.com/open-sorcerer/"
             target="_blank"
             rel="noreferrer"
             className="link link-primary"
           >
-            aeminium labs
+            Open-Sorcerers
           </a>
           . Powered by{" "}
           <a
