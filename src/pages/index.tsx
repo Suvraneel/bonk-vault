@@ -18,7 +18,9 @@ import { toast } from "react-hot-toast";
 import { Modal } from "@components/layout/modal";
 import { Footer } from "@components/layout/footer";
 import SplineObj from "@components/home/SplineObj";
+import { ThirdwebStorage } from "@thirdweb-dev/storage";
 import { CreatorModal } from "@components/layout/creator-modal";
+import { useStorageUpload } from "@thirdweb-dev/react";
 
 const Home: NextPage = () => {
   const { publicKey, signTransaction, connected } = useWallet();
@@ -30,6 +32,26 @@ const Home: NextPage = () => {
   const twitterHandle = data && data.handle;
 
   const [txState, setTxState] = React.useState<ButtonState>("initial");
+
+  const { mutateAsync: upload } = useStorageUpload();
+
+  const gatewayUrls = {
+    // Here we set the gateway URLs for this scheme, and we include a backup in case the first one fails
+    "example://": ["https://gateway.pinata.cloud/ipfs/"],
+  };
+
+  const storage = new ThirdwebStorage({ gatewayUrls });
+
+  const uploadData = async () => {
+    // getting the data
+    const dataToUpload = {
+      name: "NFT #1",
+      description: "This is my first NFT",
+    };
+    // uploading the data
+    // const uri = await upload({ data: dataToUpload });
+    // console.log(uri);
+  };
 
   const onTxClick =
     ({
@@ -43,89 +65,89 @@ const Home: NextPage = () => {
       address?: string;
       amount?: string;
     }) =>
-      async () => {
-        if (connected && publicKey && signTransaction && txState !== "loading") {
-          setTxState("loading");
-          const buttonToastId = toast.loading("Creating transaction...", {
-            id: `buttonToast${isToken ? "Token" : ""},${isBurn ? "burn" : ""}`,
+    async () => {
+      if (connected && publicKey && signTransaction && txState !== "loading") {
+        setTxState("loading");
+        const buttonToastId = toast.loading("Creating transaction...", {
+          id: `buttonToast${isToken ? "Token" : ""},${isBurn ? "burn" : ""}`,
+        });
+
+        try {
+          // Create transaction
+          let { tx: txCreateResponse } = await fetcher<TxCreateData>(
+            "/api/tx/create",
+            {
+              method: "POST",
+              body: JSON.stringify({
+                payerAddress: publicKey.toBase58(),
+                receiverAddress: address
+                  ? new PublicKey(address).toBase58()
+                  : undefined,
+                amount: amount,
+                type: isToken ? "token" : "sol",
+                transactionType: isBurn ? "burn" : "send",
+              }),
+              headers: { "Content-type": "application/json; charset=UTF-8" },
+            }
+          );
+
+          const tx = Transaction.from(Buffer.from(txCreateResponse, "base64"));
+
+          // Request signature from wallet
+          const signedTx = await signTransaction(tx);
+          const signedTxBase64 = signedTx.serialize().toString("base64");
+
+          // Send signed transaction
+          let { txSignature } = await fetcher<TxSendData>("/api/tx/send", {
+            method: "POST",
+            body: JSON.stringify({ signedTx: signedTxBase64 }),
+            headers: { "Content-type": "application/json; charset=UTF-8" },
           });
 
-          try {
-            // Create transaction
-            let { tx: txCreateResponse } = await fetcher<TxCreateData>(
-              "/api/tx/create",
-              {
-                method: "POST",
-                body: JSON.stringify({
-                  payerAddress: publicKey.toBase58(),
-                  receiverAddress: address
-                    ? new PublicKey(address).toBase58()
-                    : undefined,
-                  amount: amount,
-                  type: isToken ? "token" : "sol",
-                  transactionType: isBurn ? "burn" : "send",
-                }),
-                headers: { "Content-type": "application/json; charset=UTF-8" },
-              }
-            );
+          setTxState("success");
+          toast.success(
+            (t) => (
+              <a
+                href={`https://solscan.io/tx/${txSignature}`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                Transaction created
+              </a>
+            ),
+            { id: buttonToastId, duration: 10000 }
+          );
 
-            const tx = Transaction.from(Buffer.from(txCreateResponse, "base64"));
+          const confirmationToastId = toast.loading(
+            "Confirming transaction..."
+          );
 
-            // Request signature from wallet
-            const signedTx = await signTransaction(tx);
-            const signedTxBase64 = signedTx.serialize().toString("base64");
-
-            // Send signed transaction
-            let { txSignature } = await fetcher<TxSendData>("/api/tx/send", {
+          const confirmationResponse = await fetcher<TxConfirmData>(
+            "/api/tx/confirm",
+            {
               method: "POST",
-              body: JSON.stringify({ signedTx: signedTxBase64 }),
-              headers: { "Content-type": "application/json; charset=UTF-8" },
-            });
-
-            setTxState("success");
-            toast.success(
-              (t) => (
-                <a
-                  href={`https://solscan.io/tx/${txSignature}`}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  Transaction created
-                </a>
-              ),
-              { id: buttonToastId, duration: 10000 }
-            );
-
-            const confirmationToastId = toast.loading(
-              "Confirming transaction..."
-            );
-
-            const confirmationResponse = await fetcher<TxConfirmData>(
-              "/api/tx/confirm",
-              {
-                method: "POST",
-                body: JSON.stringify({ txSignature }),
-                headers: {
-                  "Content-type": "application/json; charset=UTF-8",
-                },
-              }
-            );
-
-            if (confirmationResponse.confirmed) {
-              toast.success("Transaction confirmed", {
-                id: confirmationToastId,
-              });
-            } else {
-              toast.success("Error confirming transaction", {
-                id: confirmationToastId,
-              });
+              body: JSON.stringify({ txSignature }),
+              headers: {
+                "Content-type": "application/json; charset=UTF-8",
+              },
             }
-          } catch (error: any) {
-            setTxState("error");
-            toast.error("Error creating transaction", { id: buttonToastId });
+          );
+
+          if (confirmationResponse.confirmed) {
+            toast.success("Transaction confirmed", {
+              id: confirmationToastId,
+            });
+          } else {
+            toast.success("Error confirming transaction", {
+              id: confirmationToastId,
+            });
           }
+        } catch (error: any) {
+          setTxState("error");
+          toast.error("Error creating transaction", { id: buttonToastId });
         }
-      };
+      }
+    };
 
   return (
     <>
@@ -156,7 +178,7 @@ const Home: NextPage = () => {
           </div>
         </DrawerContainer>
         <CreatorModal
-          onClick={onTxClick} //harsh Ghodkar
+          onClick={upload} //harsh Ghodkar
           butttonState={txState}
           headerContent="Send some $BONK to someone you love"
           buttonContent="Upload"
