@@ -129,7 +129,7 @@ const Home: NextPage = () => {
   return (
     <>
       <Head>
-        <title>NextJS Solana Starter Kit</title>
+        <title>Bonk Mall</title>
         <meta
           name="description"
           content="Everything you need to start your Solana dApp"
@@ -140,46 +140,45 @@ const Home: NextPage = () => {
         {/* <SplineObj scene={'https://prod.spline.design/DxJImpAG0NRWpxwQ/scene.splinecode'} /> */}
       </div>
       <div className="h-fit w-full absolute z-100 top-0 left-0 text-white ">
-
-          <DrawerContainer>
-            <PageContainer>
-              <Header twitterHandle={twitterHandle} />
-              <HomeContent />
-              <Footer />
-            </PageContainer>
-            <div className="drawer-side">
-              <label htmlFor="my-drawer-3" className="drawer-overlay"></label>
-              <Menu
-                twitterHandle={twitterHandle}
-                className="p-4 w-80 bg-base-100 text-base-content"
-              />
-            </div>
-          </DrawerContainer>
-          <Modal
-            onClick={onTxClick}
-            butttonState={txState}
-            headerContent="Send some $BONK to someone you love"
-            buttonContent="Send $BONK"
-            isToken={true}
-            id="bonk-modal"
-          />
-          <Modal
-            onClick={onTxClick}
-            butttonState={txState}
-            headerContent="Burn some $BONK"
-            buttonContent="Burn $BONK"
-            isToken={true}
-            isBurn={true}
-            id="bonk-burn-modal"
-          />
-          <Modal
-            onClick={onTxClick}
-            butttonState={txState}
-            headerContent="Send some SOL to someone you love"
-            buttonContent="Send SOL"
-            id="sol-modal"
-          />
+        <DrawerContainer>
+          <PageContainer>
+            <Header twitterHandle={twitterHandle} />
+            <HomeContent />
+            <Footer />
+          </PageContainer>
+          <div className="drawer-side">
+            <label htmlFor="my-drawer-3" className="drawer-overlay"></label>
+            <Menu
+              twitterHandle={twitterHandle}
+              className="p-4 w-80 bg-base-100 text-base-content"
+            />
           </div>
+        </DrawerContainer>
+        <Modal
+          onClick={onTxClick}
+          butttonState={txState}
+          headerContent="Send some $BONK to someone you love"
+          buttonContent="Send $BONK"
+          isToken={true}
+          id="bonk-modal"
+        />
+        <Modal
+          onClick={onTxClick}
+          butttonState={txState}
+          headerContent="Burn some $BONK"
+          buttonContent="Burn $BONK"
+          isToken={true}
+          isBurn={true}
+          id="bonk-burn-modal"
+        />
+        <Modal
+          onClick={onTxClick}
+          butttonState={txState}
+          headerContent="Send some SOL to someone you love"
+          buttonContent="Send SOL"
+          id="sol-modal"
+        />
+      </div>
     </>
   );
 };
