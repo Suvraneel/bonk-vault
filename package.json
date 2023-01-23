@@ -1,11 +1,10 @@
 {
-  "name": "nextjs-solana-starter-kit",
-  "description": "Build your own Solana dApp with NextJS and TypeScript",
+  "name": "bonk-vault",
+  "description": "Idea was to use Bonk to integrate with Arweave via Bundlr and make a simple interface for people to upload their files on Arweave. Using Orca to swap and making the UX simpler. Currently facing problems with bundlr node sdk and working on fixing it. Works correctly on IPFS and has Burn Bonk Feature integrated just to throw in some rizz. Future goals to convert this to a simple plugin sdk to allow other devs to integrate easily.",
   "version": "0.1.0",
   "author": {
-    "name": "Bernardo Raposo",
-    "email": "hi@bernardoraposo.com",
-    "url": "http://bernardoraposo.com"
+    "name": "Open-Sorcerer",
+    "url": "https://github.com/Open-Sorcerer"
   },
   "license": "MIT",
   "scripts": {
