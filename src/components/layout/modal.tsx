@@ -30,7 +30,7 @@ export function Modal({
       <label htmlFor={id} className="modal cursor-pointer">
         <label className="modal-box relative" htmlFor="">
           <h3 className="font-bold text-xl mb-2">{headerContent}</h3>
-          <div className="form-control w-full mb-2">
+          {!isBurn && <div className="form-control w-full mb-2">
             <label className="label">
               <span className="label-text">Wallet Address</span>
             </label>
@@ -40,7 +40,7 @@ export function Modal({
               className="input input-bordered w-full"
               onChange={(ev) => setAddress(ev.currentTarget.value)}
             />
-          </div>
+          </div>}
           <div className="form-control w-full">
             <label className="label">
               <span className="label-text">Amount</span>

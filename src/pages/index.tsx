@@ -138,7 +138,7 @@ const Home: NextPage = () => {
       </Head>
       <div className="h-screen z-50">
         <SplineObj scene={"scene.splinecode"} />
-        {/* <SplineObj scene={'https://prod.spline.design/DxJImpAG0NRWpxwQ/scene.splinecode'} /> */}
+        {/* <SplineObj scene={'https://prod.spline.design/LypQDGGmdfhzSged/scene.splinecode'} /> */}
       </div>
       <div className="h-fit w-full absolute z-100 top-0 left-0 text-white ">
         <DrawerContainer>
