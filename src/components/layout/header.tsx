@@ -11,9 +11,7 @@ export function Header({ twitterHandle }: Props) {
     <div className="navbar mb-6 shadow-lg bg-neutral text-neutral-content rounded-box">
       <div className="navbar-start">
         <div className="px-2 mx-2">
-          <span className="text-sm md:text-lg font-bold">
-            NextJS Solana Starter Kit
-          </span>
+          <span className="text-sm md:text-lg font-bold">Bonk Mall</span>
         </div>
       </div>
 

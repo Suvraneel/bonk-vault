@@ -130,7 +130,7 @@ const Home: NextPage = () => {
   return (
     <>
       <Head>
-        <title>NextJS Solana Starter Kit</title>
+        <title>Bonk Mall</title>
         <meta
           name="description"
           content="Everything you need to start your Solana dApp"
@@ -141,7 +141,6 @@ const Home: NextPage = () => {
         {/* <SplineObj scene={'https://prod.spline.design/DxJImpAG0NRWpxwQ/scene.splinecode'} /> */}
       </div>
       <div className="h-fit w-full absolute z-100 top-0 left-0 text-white ">
-
         <DrawerContainer>
           <PageContainer>
             <Header twitterHandle={twitterHandle} />
