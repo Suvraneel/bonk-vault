@@ -30,12 +30,10 @@ export function Menu({ twitterHandle, className }: Props) {
           )}
           <li>
             <label
-              htmlFor="create-vault"
+              htmlFor="creator-modal"
               className="btn-ghost lg:btn mb-1 lg:mr-1 lg:mb-0"
             >
-              <Link href="/create">
-                Create Bonk Vault
-              </Link>
+              Create Bonk Vault
             </label>
           </li>
           <li>
