@@ -18,9 +18,9 @@ import { toast } from "react-hot-toast";
 import { Modal } from "@components/layout/modal";
 import { Footer } from "@components/layout/footer";
 import SplineObj from "@components/home/SplineObj";
-import { ThirdwebStorage } from "@thirdweb-dev/storage";
 import { CreatorModal } from "@components/layout/creator-modal";
-import { useStorageUpload } from "@thirdweb-dev/react";
+import { ThirdwebStorage } from "@thirdweb-dev/storage";
+// import { useStorageUpload } from "@thirdweb-dev/react";
 
 const Home: NextPage = () => {
   const { publicKey, signTransaction, connected } = useWallet();
@@ -32,8 +32,6 @@ const Home: NextPage = () => {
   const twitterHandle = data && data.handle;
 
   const [txState, setTxState] = React.useState<ButtonState>("initial");
-
-  const { mutateAsync: upload } = useStorageUpload();
 
   const gatewayUrls = {
     // Here we set the gateway URLs for this scheme, and we include a backup in case the first one fails
@@ -48,9 +46,9 @@ const Home: NextPage = () => {
       name: "NFT #1",
       description: "This is my first NFT",
     };
-    // uploading the data
-    // const uri = await upload({ data: dataToUpload });
-    // console.log(uri);
+
+    const uri = await storage.upload({ data: dataToUpload });
+    console.log(uri);
   };
 
   const onTxClick =
@@ -178,7 +176,7 @@ const Home: NextPage = () => {
           </div>
         </DrawerContainer>
         <CreatorModal
-          onClick={upload} //harsh Ghodkar
+          onClick={uploadData} //harsh Ghodkar
           butttonState={txState}
           headerContent="Send some $BONK to someone you love"
           buttonContent="Upload"
